@@ -1,0 +1,15 @@
+[package]
+name = "cable"
+edition = "2024.beta"
+published-at = "0x2af7f0185c6bd72c965245926838864638b39e850e27ed06981cbb2c8369d301"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet-v1.33.0" }
+
+[addresses]
+cable = "0x2af7f0185c6bd72c965245926838864638b39e850e27ed06981cbb2c8369d301"
+#cable = "0x0"
+
+[dev-dependencies]
+
+[dev-addresses]

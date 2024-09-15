@@ -1,0 +1,5 @@
+[config]
+rpc = "https://fullnode.testnet.sui.io:443"
+
+[packages]
+cable = { local = "." }

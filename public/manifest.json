@@ -1,0 +1,26 @@
+{
+  "name": "Cable",
+  "short_name": "Cable",
+  "description": "End-to-end encrypted messaging on Sui.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/big_icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
