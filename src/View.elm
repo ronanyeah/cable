@@ -146,6 +146,13 @@ viewHome model =
             , width <| px 250
             , monospaceFont
             ]
+    , text "View code"
+        |> linkOut "https://github.com/ronanyeah/cable"
+            [ hover
+            , Font.underline
+            , centerX
+            , monospaceFont
+            ]
     , [ [ img "/sui.png" [ height <| px 20 ]
         , text "Connect with Sui"
         ]
@@ -431,7 +438,7 @@ viewChats model wallet =
 
         section title xs =
             [ [ text title
-                    |> el [ Font.bold, Font.size 30 ]
+                    |> el [ Font.bold, Font.size 30, titleFont ]
               , text "Refresh ⟳"
                     |> btn (Just RefreshChats) [ Font.underline, Font.size 18 ]
               ]
@@ -615,10 +622,8 @@ viewWalletAddr_ : String -> String -> List (Attribute msg) -> Element msg
 viewWalletAddr_ txt val attrs =
     text txt
         |> linkOut ("https://testnet.suivision.xyz/account/" ++ val)
-            ([ hover
-             , Font.underline
-             ]
-                ++ attrs
+            (Font.underline
+                :: attrs
             )
 
 
