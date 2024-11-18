@@ -29,6 +29,9 @@ type alias WriteArgs =
 port connect : () -> Cmd msg
 
 
+port disconnect : () -> Cmd msg
+
+
 port createChat : { wallet : String, counterparty : String } -> Cmd msg
 
 

@@ -65,6 +65,14 @@ update msg model =
         Connect ->
             ( model, Ports.connect () )
 
+        Disconnect ->
+            ( { model
+                | wallet = Nothing
+                , loadedChats = Dict.empty
+              }
+            , Ports.disconnect ()
+            )
+
         SetView w ->
             ( { model | chatView = w }
             , Cmd.none

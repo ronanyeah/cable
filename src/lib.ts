@@ -20,8 +20,6 @@ const Message = bcs.struct("Message", {
   previousMessage: bcs.option(bcs.string()),
 });
 
-export const SUI_TESTNET_CHAIN = "sui:testnet";
-
 const AGG_URL = "https://aggregator.walrus-testnet.walrus.space";
 const PUB_URL = "https://publisher.walrus-testnet.walrus.space";
 

@@ -18,10 +18,11 @@ import * as lib from "./lib";
 const ecCurve = new ec("secp256k1");
 
 const walletHooks: walletSelect.WalletHooks = {
-  signMsg: null,
-  setModalOpen: null,
-  disconnectWallet: null,
-  signTx: null,
+  currentWallet: null,
+  signMsg: undefined,
+  setModalOpen: undefined,
+  disconnectWallet: undefined,
+  signTx: undefined,
 };
 
 interface ChatWatch {
@@ -99,10 +100,7 @@ let chatWatch: ChatWatch | null = null;
         txb.setSender(wallet);
         registerMessage(txb, { chat: chatId, msg: blobObj });
 
-        const signed = await walletHooks.signTx({
-          transaction: txb,
-          chain: lib.SUI_TESTNET_CHAIN,
-        });
+        const signed = await walletHooks.signTx(txb);
         app.ports.statusCb.send("Submitting transaction");
         await lib.submitAndConfirmTx(signed);
 
@@ -129,10 +127,7 @@ let chatWatch: ChatWatch | null = null;
       const txb = new Transaction();
       txb.setSender(wallet);
       setPubkey(txb, { chat: chatId, pubkey: sharedKey.publicKeyHex });
-      const signed = await walletHooks.signTx({
-        transaction: txb,
-        chain: lib.SUI_TESTNET_CHAIN,
-      });
+      const signed = await walletHooks.signTx(txb);
       await lib.submitAndConfirmTx(signed);
 
       const args = await fetchElmChat(chatId, wallet);
@@ -197,10 +192,7 @@ let chatWatch: ChatWatch | null = null;
       }
 
       const txb = lib.rejectChat(wallet, chatId, chatLink.link);
-      const signed = await walletHooks.signTx({
-        transaction: txb,
-        chain: lib.SUI_TESTNET_CHAIN,
-      });
+      const signed = await walletHooks.signTx(txb);
       await lib.submitAndConfirmTx(signed);
       app.ports.deleteChatCb.send(chatId);
     })().catch(console.error)
@@ -235,10 +227,7 @@ let chatWatch: ChatWatch | null = null;
           return null;
         }
         const createTxb = lib.createConvo(wallet, counterparty);
-        const signed = await walletHooks.signTx({
-          transaction: createTxb,
-          chain: lib.SUI_TESTNET_CHAIN,
-        });
+        const signed = await walletHooks.signTx(createTxb);
         const res = await lib.submitAndConfirmTx(signed);
 
         const newObj = res.effects!.created!.find(
@@ -272,13 +261,25 @@ let chatWatch: ChatWatch | null = null;
     })().catch(console.error)
   );
 
+  app.ports.disconnect.subscribe(() => {
+    walletHooks.disconnectWallet!();
+  });
+
   app.ports.copy.subscribe((val) => navigator.clipboard.writeText(val));
 
   //app.ports.log.subscribe(console.log);
 
   // PORT SETUP COMPLETE
 
-  walletSelect.init(app, walletHooks);
+  walletSelect.walletSubscribe((wallet) => {
+    if (wallet) {
+      app.ports.walletCb.send(wallet.address);
+    } else {
+      app.ports.walletCb.send(null);
+    }
+  });
+
+  walletSelect.init(walletHooks);
 })().catch(console.error);
 
 function capitalize(val: string) {

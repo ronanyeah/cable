@@ -172,7 +172,17 @@ viewDash model wallet =
     [ [ text "Connected:"
       , viewWalletAddr wallet [ Font.bold ]
       , img "/copy.png" [ height <| px 20 ]
-            |> btn (Just <| Copy wallet) []
+            |> btn (Just <| Copy wallet)
+                [ Html.Attributes.title "Copy"
+                    |> htmlAttribute
+                ]
+      , text "X"
+            |> btn (Just Disconnect)
+                [ Font.bold
+                , Font.size 20
+                , Html.Attributes.title "Disconnect"
+                    |> htmlAttribute
+                ]
       ]
         |> row [ spacing 10 ]
     , [ [ text "Create Chat"

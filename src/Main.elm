@@ -52,14 +52,6 @@ init _ =
       , loadedChats = Dict.empty
       , chatView = LiveChat
       , createInProgress = False
-      , myPublicKey =
-            { alg = ""
-            , e = ""
-            , ext = True
-            , key_ops = []
-            , kty = ""
-            , n = ""
-            }
       }
     , Cmd.none
     )

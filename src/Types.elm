@@ -12,7 +12,6 @@ type alias Model =
     , time : Posix
     , arrow : Bool
     , scroll : ScrollStatus
-    , myPublicKey : CryptoKey
     , wallet : Maybe String
     , partnerInput : String
     , loadedChats : Dict String Ports.Chat
@@ -46,6 +45,7 @@ type Msg
     | WriteMessage Ports.WriteArgs
     | RejectChat String
     | StatusCb (Maybe String)
+    | Disconnect
 
 
 type alias Flags =
@@ -72,16 +72,6 @@ type Message
 
 type ConnId
     = ConnId String
-
-
-type alias CryptoKey =
-    { alg : String
-    , e : String
-    , ext : Bool
-    , key_ops : List String
-    , kty : String
-    , n : String
-    }
 
 
 type alias ChatArgs =

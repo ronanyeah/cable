@@ -6,6 +6,7 @@ interface ElmApp {
 
 interface Ports {
   connect: PortOut<null>;
+  disconnect: PortOut<null>;
   createChat: PortOut<{
     wallet: string;
     counterparty: string;
@@ -54,6 +55,10 @@ interface PortIn<T> {
   send: (_: T) => void;
 }
 
+type PortResult<E, T> =
+    | { err: E; data: null }
+    | { err: null; data: T };
+
 interface Chat {
   myPub: string | null;
   myPriv: string | null;
@@ -73,4 +78,12 @@ interface WriteArgs {
   message: string;
 }
 
-export { ElmApp, Chat, WriteArgs };
+function portOk<E, T>(data: T): PortResult<E, T> {
+  return { data, err: null };
+}
+
+function portErr<E, T>(err: E): PortResult<E, T> {
+  return { data: null, err };
+}
+
+export { ElmApp, PortResult, portOk, portErr, Chat, WriteArgs };
