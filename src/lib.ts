@@ -22,7 +22,8 @@ const Message = bcs.struct("Message", {
 
 export const SUI_TESTNET_CHAIN = "sui:testnet";
 
-const AGG_URL = "https://aggregator-devnet.walrus.space/v1/";
+const AGG_URL = "https://aggregator.walrus-testnet.walrus.space";
+const PUB_URL = "https://publisher.walrus-testnet.walrus.space";
 
 export const ZERO_ADDR =
   "0x0000000000000000000000000000000000000000000000000000000000000000";
@@ -72,7 +73,7 @@ export async function readMessages(idx: string, sharedKey: CryptoKey) {
   let id = idx;
   const out = [];
   while (true) {
-    const response = await fetch(`${AGG_URL}${id}`);
+    const response = await fetch(`${AGG_URL}/v1/${id}`);
     const val = new Uint8Array(await response.arrayBuffer());
     const decryptedMessage = await decryptBytes(val, sharedKey);
     const message = Message.parse(decryptedMessage);
@@ -155,15 +156,10 @@ export function createConvo(wallet: string, invitee: string) {
 }
 
 async function storeBlob(inputFile: Uint8Array, numEpochs: number) {
-  const basePublisherUrl = "https://publisher-devnet.walrus.space";
-
-  const response = await fetch(
-    `${basePublisherUrl}/v1/store?epochs=${numEpochs}`,
-    {
-      method: "PUT",
-      body: inputFile,
-    }
-  );
+  const response = await fetch(`${PUB_URL}/v1/store?epochs=${numEpochs}`, {
+    method: "PUT",
+    body: inputFile,
+  });
   if (response.status === 200) {
     return response.json();
   } else {
